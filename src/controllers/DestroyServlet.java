@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -13,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import models.Message;
 import utils.DButil;
 
-@WebServlet("/update")
-public class UpdateServlet extends HttpServlet {
+@WebServlet("/destroy")
+public class DestroyServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public UpdateServlet() {
+    public DestroyServlet() {
         super();
     }
 
@@ -27,28 +26,22 @@ public class UpdateServlet extends HttpServlet {
         String _token = request.getParameter("_token");
 
         if(_token != null && _token.equals(request.getSession().getId())) {
+
             EntityManager em = DButil.createEntityManager();
 
             Message m = em.find(Message.class, (Integer)(request.getSession().getAttribute("message_id")));
 
-            String title = request.getParameter("title");
-            m.setTitle(title);
-
-            String content = request.getParameter("content");
-            m.setContent(content);
-
-            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-            m.setUpdated_at(currentTime);
-
             em.getTransaction().begin();
+            em.remove(m);
             em.getTransaction().commit();
             em.close();
 
             request.getSession().removeAttribute("message_id");
 
             response.sendRedirect(request.getContextPath() + "/index");
-            
+
         }
+
     }
 
 }

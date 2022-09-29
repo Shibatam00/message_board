@@ -4,13 +4,38 @@
 <c:import url="../layout/app.jsp">
     <c:param name="content">
 
-        <h2>id：${message.id} のメッセージ編集ページ</h2>
+    <c:choose>
+        <c:when test="${message != null}">
 
-        <form method="POST" action="${pageContext.request.contextPath}/update">
-            <c:import url="_form.jsp"/>
-        </form>
+            <h2>id：${message.id} のメッセージ編集ページ</h2>
 
-        <p><a href="${pageContext.request.contextPath}/index">一覧へ戻る</a></p>
+            <form method="POST" action="${pageContext.request.contextPath}/update">
+                <c:import url="_form.jsp"/>
 
+            </form>
+
+            <p><a href="${pageContext.request.contextPath}/index">一覧へ戻る</a></p>
+
+            <p><a href="#" onclick="confirmDestroy();return false">このページを削除する</a></p>
+            <form method="POST" action="${pageContext.request.contextPath}/destroy">
+                <input type="hidden" name="_token" value="${_token}"/>
+            </form>
+
+            <script>
+            function confirmDestroy() {
+                if(confirm("本当に削除してよろしいですか？") == true){
+                    document.forms[1].submit();
+                } else {
+                    alert("削除をやめました");
+                }
+            }
+            </script>
+        </c:when>
+
+        <c:otherwise>
+            <h2>お探しのデータは見つかりませんでした</h2>
+        </c:otherwise>
+
+        </c:choose>
     </c:param>
 </c:import>
