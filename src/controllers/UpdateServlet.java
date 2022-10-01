@@ -42,12 +42,13 @@ public class UpdateServlet extends HttpServlet {
 
             em.getTransaction().begin();
             em.getTransaction().commit();
+            request.getSession().setAttribute("flash", "更新が完了しました");
             em.close();
 
             request.getSession().removeAttribute("message_id");
 
             response.sendRedirect(request.getContextPath() + "/index");
-            
+
         }
     }
 
