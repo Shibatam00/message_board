@@ -22,18 +22,21 @@ public class IndexServlet extends HttpServlet {
         super();
     }
 
+    @SuppressWarnings("unused")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         EntityManager em = DButil.createEntityManager();
 
-        int page = 1;
+        Integer page = 1;
+
         try {
             page = Integer.parseInt(request.getParameter("page"));
         } catch (NumberFormatException e) {
-
+            e.printStackTrace();
         }
 
+        
         List<Message> messages = em.createNamedQuery("getAllMessages", Message.class)
                 .setFirstResult(15 * (page - 1))
                 .setMaxResults(15)
